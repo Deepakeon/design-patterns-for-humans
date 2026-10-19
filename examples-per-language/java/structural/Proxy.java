@@ -15,21 +15,19 @@ class LabDoor implements Door{
 
 class SecuredDoor implements Door{
     protected Door door;
+    String password;
 
-    SecuredDoor(Door door){
+    SecuredDoor(Door door, String password){
         this.door = door;
+        this.password = password;
     }
 
-    public boolean authenticate(String password){
+    public boolean authenticate(){
         return password.equals("$ecr@t");
     }
 
     public void open(){
-        this.open(null);
-    }
-
-    public void open(String password){
-        if(this.authenticate(password)){
+        if(this.authenticate()){
             this.door.open();
         }else{
             System.out.println("Big no! It ain't possible.");
@@ -43,10 +41,11 @@ class SecuredDoor implements Door{
 
 class Proxy {
     public static void main(String[] args) {
-        SecuredDoor door = new SecuredDoor(new LabDoor());
-        door.open("invalid");
+        Door door = new SecuredDoor(new LabDoor(), "invalid");
+        door.open();
 
-        door.open("$ecr@t");
+        door = new SecuredDoor(new LabDoor(), "$ecr@t");
+        door.open();
         door.close();
     }
 }
